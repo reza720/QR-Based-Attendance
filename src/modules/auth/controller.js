@@ -7,7 +7,6 @@ import * as userService from "./service.js";
 export const login = async (req, res, next) => {
     try{
         const user = await userService.login(req. body);
-
         req.session.userId = user.id;
 
         res.status(200).json({

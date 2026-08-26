@@ -1,11 +1,11 @@
 import express from "express";
 import * as employeeController from "./controller.js";
 import upload from "../../config/multer.js";
-//import authRequired from "../../middleware/authRequired.js";
+import authRequired from "../../middleware/authRequired.js";
 
 const router = express.Router();
 
-//router.use(authRequired);
+router.use(authRequired);
 
 router.post("/", employeeController.registerEmployee);
 router.get("/", employeeController.getEmployees);
