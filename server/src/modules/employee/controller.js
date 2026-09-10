@@ -4,18 +4,13 @@ import * as employeeService from "./service.js"
 // register
 // input: firstName and lastName from req.body
 // output: success, status code, message, data
-export const registerEmployee = async (req, res, next) => {
-    try{
-        const employee = await employeeService.registerEmployee(req.body);
-        res.status(201).json({
-            success: true,
-            message: "Employee Registered",
-            employee
-        });
-    }
-    catch(err){
-        next(err);
-    }
+export const registerEmployee = async (req, res) => {
+    const employee = await employeeService.registerEmployee(req.body);
+    res.status(201).json({
+        success: true,
+        message: "Employee Registered",
+        employee
+    });
 };
 // Photo upload: 
 // input: id from req.param, file from req.file
