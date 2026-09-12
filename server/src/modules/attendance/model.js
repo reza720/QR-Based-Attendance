@@ -4,12 +4,12 @@ import Employee from "../employee/model.js";
 
 const Attendance = sequelize.define("Attendance",{
     id:{
-        type:DataTypes.INTEGER, 
-        autoIncrement:true, 
+        type:DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4, 
         primaryKey: true
     },
     employeeId:{
-        type:DataTypes.INTEGER, 
+        type:DataTypes.UUID, 
         allowNull:false
     },
     date:{

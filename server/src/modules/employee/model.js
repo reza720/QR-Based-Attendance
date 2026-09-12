@@ -2,9 +2,9 @@ import sequelize from "../../database/sequelize.js";
 import { DataTypes } from "sequelize";
 
 const Employee = sequelize.define("Employee",{
-    id:{
-        type: DataTypes.INTEGER,
-        autoIncrement: true, 
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4, 
         primaryKey: true
     },
     firstName: {
@@ -15,7 +15,7 @@ const Employee = sequelize.define("Employee",{
         type:DataTypes.STRING,
         allowNull:false
     },
-    photoURL:{
+    photoPath:{
         type: DataTypes.STRING,
         allowNull: true,
         unique: true

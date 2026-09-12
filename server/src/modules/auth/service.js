@@ -25,25 +25,26 @@ export const login = async ({userName, password}) => {
 // update (userName/password)
 // input: userId, data that need to be updated
 // output: updated data of user
-export const updateUser = async ({userId, newUserName, newPassword}) => {
+export const updateUser = async ({userId, oldPassword, newUserName, newPassword}) => {
     const user = await User.findByPk(userId);
-    if(!user) throwError("User not found", 404);
+    if (!user) throwError('User not found', 404);
+
+    const isPassMatched = await bcrypt.compare(oldPassword, user.passwordHash);
+    if (!isPassMatched) throwError('Password is not valid', 401);
 
     const updatedData = {};
-    if(newUserName !== undefined){
-        updatedData.userName = newUserName
-    };
-
-    if(newPassword !== undefined){
+    if (newUserName !== undefined) {
+        updatedData.userName = newUserName;
+    }
+    if (newPassword !== undefined) {
         updatedData.passwordHash = await bcrypt.hash(newPassword, 10);
     }
-
     const updatedUser = await user.update(updatedData);
 
     return {
         id: updatedUser.id,
-        userName: updatedUser.userName
-    }
+        userName: updatedUser.userName,
+    };
 };
 
 
