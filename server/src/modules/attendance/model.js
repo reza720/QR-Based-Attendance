@@ -1,3 +1,11 @@
+/**
+ * @module Attendance
+ * Sequelize model definition for daily Attendance of Employees
+ *
+ * @requires Employee 
+ * @exports Attendance
+ */
+
 import sequelize from "../../database/sequelize.js";
 import { DataTypes } from "sequelize";
 import Employee from "../employee/model.js";

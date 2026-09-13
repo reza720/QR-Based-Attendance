@@ -1,3 +1,10 @@
+/**
+ * @module User
+ * Sequelize model definition for User
+ * 
+ * @exports User
+ */
+
 import sequelize from "../../database/sequelize.js";
 import { DataTypes } from "sequelize";
 

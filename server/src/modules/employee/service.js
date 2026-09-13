@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import qrcode from "qrcode";
 import crypto from "node:crypto";
-import { Model, Op } from "sequelize";
+import { Op } from "sequelize";
 import sequelize from "../../database/sequelize.js";
 
 import Employee from "./model.js";
@@ -15,10 +15,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const QRcodeDir = path.join(__dirname, "../../../storage/QRcodes");
 
-// Register:
-// Input: firstName, lastName
-// Output: Employee registered in the database,
-// QR code generated, newly registered employee data returned
+/**
+ * Register a new employee and generate an unique QR code 
+ * 
+ * @param {Object} Employee - Employee details
+ * @returns {Promise<Object>} - Newly registered employee record
+ * @throws {Error} - If registration or QR code generation fails
+ */
+
 export const registerEmployee = async ({ firstName, lastName }) => {
     const transaction = await sequelize.transaction();
 
@@ -57,10 +61,13 @@ export const registerEmployee = async ({ firstName, lastName }) => {
         throw error;
     }
 };
-// Get All Employees:
-// Input: pagination, sorting by firstName (ASC by default), isActive filter,
-// search by firstName or lastName
-// Output: Employee list with pagination metadata
+
+/**
+ * Retrieve a list of employees
+ *
+ * @param {Object} options - Query parameters: page, limit, isActive
+ * @returns {Promise<Object>} - Paginated employee list
+ */
 export const getEmployees = async (options = {}) => {
     const {
         page = 1,
@@ -108,6 +115,10 @@ export const getEmployees = async (options = {}) => {
         employees: employees.rows
     };
 };
+
+
+
+
 // Get One Employee:
 // Input: employeeId
 // Output: Full employee data
