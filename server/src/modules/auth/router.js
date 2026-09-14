@@ -3,7 +3,6 @@ import express from "express";
 import authRequired from "../../middleware/authRequired.js";
 import {loginRateLimiter} from "../../middleware/rateLimiter.js";
 
-console.log(loginRateLimiter)
 const router = express.Router();
 
 router.post("/login", 
