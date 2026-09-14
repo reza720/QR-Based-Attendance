@@ -1,9 +1,6 @@
 import * as employeeService from "./service.js"
 
-
-// register
-// input: firstName and lastName from req.body
-// output: success, status code, message, data
+// Register employee
 export const registerEmployee = async (req, res) => {
     const employee = await employeeService.registerEmployee(req.body);
     res.status(201).json({
@@ -12,9 +9,8 @@ export const registerEmployee = async (req, res) => {
         employee
     });
 };
-// Read all employees:
-// Input: query parameters from req.query
-// Output: success, status code, message, data
+
+// Retrieve list of employee
 export const getEmployees = async (req, res) => {
     const employees = await employeeService.getEmployees({
         page: req.query.page,
@@ -29,9 +25,8 @@ export const getEmployees = async (req, res) => {
         employees
     });
 };
-// read one emplyee:
-// input: id from req.param
-// output: success, status code, message, data
+
+// Retrieve a single employee
 export const getEmployee = async (req, res) => {
     const employee = await employeeService.getEmployee(req.params.id);
     res.status(200).json({
@@ -40,9 +35,8 @@ export const getEmployee = async (req, res) => {
         employee
     });
 };
-// Photo upload: 
-// input: id from req.param, file from req.file
-// output: success, status code, message, file path
+
+// Upload photo
 export const uploadPhoto = async (req, res) => {
     const photoPath = await employeeService.uploadPhoto(req.params.id, req.file);
     res.status(200).json({
@@ -51,9 +45,8 @@ export const uploadPhoto = async (req, res) => {
         photoPath
     });
 };
-// update employee:
-// input: id from req.param, data(firstName, lastName, status)from req.body,  photo from req.file
-// output: success, status code, message, data
+
+// Update employee
 export const updateEmployee = async (req, res) => {
     const employeeId = req.params.id;
     const data = req.body;
@@ -64,9 +57,8 @@ export const updateEmployee = async (req, res) => {
         employeeUpdatedData
     });
 };
-// delete employee: 
-// input: id from req.param
-// output: success, status code, message
+
+// Delete employee 
 export const deleteEmployee = async (req, res) => {
     await employeeService.deleteEmployee(req.params.id);
     res.status(200).json({
@@ -74,9 +66,8 @@ export const deleteEmployee = async (req, res) => {
         message: "Employee deleted"
     });
 };
-// geneate new QR
-// input: id from req.param
-// output: success, status code, message, qrcode path
+
+// Regeneate QR code
 export const generateNewQRcode = async (req, res) => {
     const QRcode = await employeeService.generateNewQRcode(req.params.id);
     res.status(200).json({
@@ -85,9 +76,8 @@ export const generateNewQRcode = async (req, res) => {
         QRcode
     });
 };
-// Get One Employee Attendances
-// Input: employeeId from params
-// Output: attendance record of employee with his basic info
+
+// Retrieve attendance record of an employee
 export const getEmployeeAttendances = async (req, res) => {
     const attendances = await employeeService.getEmployeeAttendances(req.params.id);
     res.status(200).json({
