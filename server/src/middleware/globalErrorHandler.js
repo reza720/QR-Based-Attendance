@@ -1,3 +1,11 @@
+/**
+ * Format and send any errors that occur in the API to the user
+ *
+ * @param {Object} err
+ * @param {Object} req
+ * @param {Object} res
+ * @param {Function} next
+ */
 export const globalErrorHandler = (err, req, res, next) => {
     const statusCode = err.statusCode || 500;
 

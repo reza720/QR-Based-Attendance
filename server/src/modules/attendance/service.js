@@ -4,11 +4,13 @@ import throwError from "../../utils/throwError.js";
 import crypto from "node:crypto";
 import { Op } from "sequelize";
 
+/**
+ * Handle employee attendance check-in and check-out
+ *
+ * @param {string} token - QR code token
+ * @returns {Promise<Object>} Employee name, attendance action, and time
+ */
 
-// Scan Service
-// Input: Token generated from reading QR code
-//flow:Hash toke -> fine employee with hashedtoken -> check employee existence -> check if employee is active -> check attendace existence with data: if not exist put checkin and chekcout to null, if exist and checkout == to null put checkout, if not null error
-// output: employee basic details + attendance details
 export const scanAttendance = async (token) => {
     const tokenHash = crypto.createHash("sha256").update(token).digest("hex");
 
@@ -17,9 +19,9 @@ export const scanAttendance = async (token) => {
             QRcodeTokenHash: tokenHash
         }
     });
-
     if (!employee) throwError("Employee not found", 400);
     if (employee.isActive === false) throwError("Employee is deactivated", 400);
+
 
     const currentDateTime = new Date();
     const today = currentDateTime.toISOString().split("T")[0];
@@ -42,14 +44,12 @@ export const scanAttendance = async (token) => {
             checkInTime: currentDateTime,
             checkOutTime: null
         });
-
         action = "checked-in";
         time = attendance.checkInTime;
     } else if (todayAttendance.checkOutTime === null) {
         attendance = await todayAttendance.update({
             checkOutTime: currentDateTime
         });
-
         action = "checked-out";
         time = attendance.checkOutTime;
     } else {
@@ -63,10 +63,12 @@ export const scanAttendance = async (token) => {
     };
 };
 
-// getAllAttendance Service
-// input: quary options
-// support: search by name, pageniation, sort by date(desc) by default
-// output: rows(attendace + emplyee basic details) and pagaination metadata
+/**
+ * Retrieve attendance history
+ * 
+ * @param {Object} options - Query parameters: page, limit, search 
+ * @returns {Promise<Object>} Paginated attendance history
+ */
 export const getAttendances = async (options = {}) => {
     const {
         page = 1,
@@ -123,9 +125,12 @@ export const getAttendances = async (options = {}) => {
         attendances: attendances.rows
     };
 };
-// getTodaysAttendance
-// input: nothing
-// output: rows (employee basic details + attendace)
+
+/**
+ * Retrieve today's attendance records.
+ *
+ * @returns {Promise<Object>} Today's attendance records and employee counts.
+ */
 export const getTodayAttendance = async () => {
     const today = new Date().toISOString().split("T")[0];
 

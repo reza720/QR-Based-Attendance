@@ -1,8 +1,6 @@
 import * as attendanceService from "./service.js";
 
-// Scan controller
-// req: token from body
-// res: success, status, message, and data returned from service
+// Scan
 export const scanAttendance = async (req, res)=> {
     const attendance = await attendanceService.scanAttendance(req.body.token);
     res.status(200).json({
@@ -12,9 +10,7 @@ export const scanAttendance = async (req, res)=> {
     });
 }
 
-// get All Attendace Controller
-// req: Quary parameters
-// as previous module
+// Retrieve list of attendances
 export const getAttendances = async (req, res) => {
     const attendances = await attendanceService.getAttendances({
         page: req.query.page,
@@ -28,9 +24,7 @@ export const getAttendances = async (req, res) => {
     });
 };
 
-// get to day attendace
-// req: just call the service and store
-// res: success, status, message, and data returned from service
+// Retrieve today's attendances
 export const getTodayAttendance = async (req, res) => {
     const todayAttendance = await attendanceService.getTodayAttendance();
     res.status(200).json({

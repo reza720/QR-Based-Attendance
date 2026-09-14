@@ -2,10 +2,12 @@ import User from "./model.js";
 import bcrypt from "bcrypt";
 import throwError from "../../utils/throwError.js";
 
-// login
-// input: userName, password
-// Verify the password
-// output: user id and userName
+ /**
+  * Authenticate a user with username and password
+  *
+  * @param {Object} credentials 
+  * @returns {Promise<Object>} Logged in user data(id and username)
+  */
 export const login = async ({userName, password}) => {
     const user = await User.findOne({
         where:{
@@ -22,9 +24,13 @@ export const login = async ({userName, password}) => {
         userName: user.userName
     }
 };
-// update (userName/password)
-// input: userId, data that need to be updated
-// output: updated data of user
+
+/**
+ * Update user's username and password
+ * 
+ * @param {Object} Credentials 
+ * @returns {Promise<Object>} User id and username
+ */
 export const updateUser = async ({userId, oldPassword, newUserName, newPassword}) => {
     const user = await User.findByPk(userId);
     if (!user) throwError('User not found', 404);
