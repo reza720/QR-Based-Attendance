@@ -16,7 +16,7 @@
   "type": "module",
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "connect-session-sequelize": "^6.1.1",
+    "connect-session-sequelize": "^8.0.6",
     "crypto": "^1.0.1",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
@@ -27,7 +27,8 @@
     "multer": "^2.2.0",
     "mysql2": "^3.23.1",
     "qrcode": "^1.5.4",
-    "sequelize": "^6.37.8"
+    "sequelize": "^6.37.8",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

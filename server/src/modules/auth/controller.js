@@ -1,8 +1,9 @@
 import * as userService from "./service.js";
 
 // Login
-export const login = async (req, res) => {
-    const user = await userService.login(req. body);
+export const login = async (req, res, next) => { 
+    const user = await userService.login(req.body);
+
     req.session.userId = user.id;
 
     res.status(200).json({

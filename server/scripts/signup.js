@@ -11,7 +11,14 @@ try {
   await sequelize.authenticate();
 
   const username = (await rl.question('Username: ')).trim();
+  if(username.length < 4){
+    throw new Error("Username must be at least 4 characters");
+  }
+
   const password = await rl.question('Password: ');
+  if(password.length < 4){
+    throw new Error("Password must be at least 4 characters");
+  }
 
   const existingUser = await User.findOne({
     where: { userName: username },

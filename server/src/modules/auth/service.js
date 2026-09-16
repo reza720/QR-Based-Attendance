@@ -9,16 +9,19 @@ import throwError from "../../utils/throwError.js";
   * @returns {Promise<Object>} Logged in user data(id and username)
   */
 export const login = async ({userName, password}) => {
+    console.log("service starts")
     const user = await User.findOne({
         where:{
             userName
         }
     });
-    if(!user) throwError("User not found", 404);
+    console.log("user try to found")
+    if(!user) throwError("Invalid password or username", 400);
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
-    if(!isPasswordValid) throwError("Invalid password", 400);
+    if(!isPasswordValid) throwError("Invalid password or username", 400);
     
+    console.log("password checked")
     return {
         id: user.id,
         userName: user.userName
@@ -31,7 +34,7 @@ export const login = async ({userName, password}) => {
  * @param {Object} Credentials 
  * @returns {Promise<Object>} User id and username
  */
-export const updateUser = async ({userId, oldPassword, newUserName, newPassword}) => {
+export const updateUser = async ({userId, oldPassword, newPassword, newUserName}) => {
     const user = await User.findByPk(userId);
     if (!user) throwError('User not found', 404);
 
