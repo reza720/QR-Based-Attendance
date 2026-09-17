@@ -1,9 +1,9 @@
-import * as userController from "./controller.js";
+import * as userController from "../controller.js";
 import express from "express";
-import authRequired from "../../middleware/authRequired.js";
-import {loginRateLimiter} from "../../middleware/rateLimiter.js";
-import { updateUserSchema } from "./validation.js";
-import validate from "../../middleware/validate.js";
+import authRequired from "../../../middleware/authRequired.js";
+import {loginRateLimiter} from "../../../middleware/rateLimiter.js";
+import { updateUserSchema } from "../validation.js";
+import validate from "../../../middleware/validate.js";
 
 const router = express.Router();
 

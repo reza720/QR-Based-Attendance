@@ -3,7 +3,7 @@ import helmet from "helmet";
 import hpp from "hpp";
 import {globalErrorHandler} from "./middleware/globalErrorHandler.js";
 import sessionMiddleware from "./config/sessionMiddleware.js";
-import router from "./routes/index.js";
+import v1Router from "./routes/v1/index.js";
 
 const app = exprss();
 
@@ -12,7 +12,7 @@ app.use(hpp());
 app.use(exprss.json());
 
 app.use(sessionMiddleware);
-app.use("/api", router);
+app.use("/api/v1", v1Router);
 
 app.use((req, res, next) => {
     res.status(404).json({
