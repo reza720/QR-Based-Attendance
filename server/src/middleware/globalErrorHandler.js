@@ -1,13 +1,18 @@
+import logger from "../config/logger.js";
+
 /**
- * Format and send any errors that occur in the API to the user
- *
- * @param {Object} err
- * @param {Object} req
- * @param {Object} res
- * @param {Function} next
+ * Handle API errors, log them, and send a standardized response.
  */
-export const globalErrorHandler = (err, req, res, next) => {
+export const globalErrorHandler = (err, req, res, _next) => {
     const statusCode = err.statusCode || 500;
+
+    logger.error(err, {
+        method: req.method,
+        path: req.originalUrl,
+        statusCode,
+        userId: req.user?.id,
+        ip: req.ip
+    });
 
     res.status(statusCode).json({
         success: false,
@@ -15,4 +20,3 @@ export const globalErrorHandler = (err, req, res, next) => {
         errors: err.errors || []
     });
 };
-
