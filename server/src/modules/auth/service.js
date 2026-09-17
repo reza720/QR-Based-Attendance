@@ -1,6 +1,7 @@
 import User from "./model.js";
 import bcrypt from "bcrypt";
 import throwError from "../../utils/throwError.js";
+import logger from "../../config/logger.js";
 
  /**
   * Authenticate a user with username and password
@@ -9,19 +10,24 @@ import throwError from "../../utils/throwError.js";
   * @returns {Promise<Object>} Logged in user data(id and username)
   */
 export const login = async ({userName, password}) => {
-    console.log("service starts")
     const user = await User.findOne({
         where:{
             userName
         }
     });
-    console.log("user try to found")
-    if(!user) throwError("Invalid password or username", 400);
+    if(!user) {
+        logger.warn(`${userName} login failed`);
+        throwError("Invalid password or username", 400);
+    }
 
     const isPasswordValid = await bcrypt.compare(password, user.passwordHash);
-    if(!isPasswordValid) throwError("Invalid password or username", 400);
+    if(!isPasswordValid){
+        logger.warn(`${userName} login failed`);
+        throwError("Invalid password or username", 400);
+    }
+
+    logger.info(`User with ID ${user.id} logged in successfully`);
     
-    console.log("password checked")
     return {
         id: user.id,
         userName: user.userName
@@ -49,6 +55,7 @@ export const updateUser = async ({userId, oldPassword, newPassword, newUserName}
         updatedData.passwordHash = await bcrypt.hash(newPassword, 10);
     }
     const updatedUser = await user.update(updatedData);
+    logger.info(`User with ID ${userId} Updated`);
 
     return {
         id: updatedUser.id,

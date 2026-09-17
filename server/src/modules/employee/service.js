@@ -5,11 +5,13 @@ import qrcode from "qrcode";
 import crypto from "node:crypto";
 import { Op } from "sequelize";
 import sequelize from "../../database/sequelize.js";
+import logger from "../../config/logger.js";
 
 import Employee from "./model.js";
 import throwError from "../../utils/throwError.js"
 import deleteFile from "../../utils/deleteFile.js";
 import Attendance from "../attendance/model.js";
+import { log } from "node:console";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,6 +45,8 @@ export const registerEmployee = async ({ firstName, lastName }) => {
             { transaction }
         );
         await transaction.commit();
+
+        logger.info(`Employee with ID ${employee.id} registered`);
 
         return {
             id: employee.id,
@@ -165,6 +169,8 @@ export const uploadPhoto = async (employeeId, file) => {
         await deleteFile(oldFilePath);
     }
 
+    logger.info(`Photo uploaded for employee with ID ${employeeId}`);
+
     return employee.photoPath;
 }
 
@@ -194,6 +200,8 @@ export const updateEmployee = async (employeeId, data = {}) => {
 
     await employee.update(updateData);
 
+    logger.info(`Employee with ID ${employeeId} updated`);
+
     return updateData;
 };
 
@@ -215,6 +223,8 @@ export const deleteEmployee = async (employeeId) => {
     if(photoPath){
         await deleteFile(photoPath);
     }
+
+    logger.info(`Employee with ID ${employeeId} deleted`);
 };
 
 /**
@@ -243,6 +253,9 @@ export const generateNewQRcode = async (employeeId) => {
         await deleteFile(newQRcodePath);
         throw err;
     }
+
+    logger.info(`New QR code generated for employee with ID ${employeeId}`);
+
     return {
         QRcodePath: employee.QRcodePath
     };

@@ -3,6 +3,7 @@ import Employee from "../employee/model.js";
 import throwError from "../../utils/throwError.js";
 import crypto from "node:crypto";
 import { Op } from "sequelize";
+import logger from "../../config/logger.js";
 
 /**
  * Handle employee attendance check-in and check-out
@@ -19,9 +20,17 @@ export const scanAttendance = async (token) => {
             QRcodeTokenHash: tokenHash
         }
     });
-    if (!employee) throwError("Employee not found", 400);
-    if (employee.isActive === false) throwError("Employee is deactivated", 400);
-
+    if (!employee){
+        logger.warn("Attendance scan attempted with unrecognized QR code");
+        throwError("Employee not found", 400);
+    } 
+   
+    if (employee.isActive === false) {
+        logger.warn("Inactive employee tried to scan",{
+            employeeId: employee.id
+        });
+        throwError("Employee is deactivated", 400);
+    }
 
     const currentDateTime = new Date();
     const today = currentDateTime.toISOString().split("T")[0];
@@ -46,12 +55,14 @@ export const scanAttendance = async (token) => {
         });
         action = "checked-in";
         time = attendance.checkInTime;
+        logger.info(`${employee.firstName} ${employee.lastName} checked in`);
     } else if (todayAttendance.checkOutTime === null) {
         attendance = await todayAttendance.update({
             checkOutTime: currentDateTime
         });
         action = "checked-out";
         time = attendance.checkOutTime;
+        logger.info(`${employee.firstName} ${employee.lastName} checked out`)
     } else {
         throwError("Employee has already checked out today", 400);
     }
