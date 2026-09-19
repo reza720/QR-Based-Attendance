@@ -3,7 +3,7 @@ import * as employeeService from "./service.js"
 // Register employee
 export const registerEmployee = async (req, res) => {
     const employee = await employeeService.registerEmployee(req.body);
-    res.status(201).json({
+    res.status(201).location(`/api/v1/employees/${employee.id}`).json({
         success: true,
         message: "Employee Registered",
         employee
