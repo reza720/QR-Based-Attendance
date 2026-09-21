@@ -4,8 +4,8 @@ import * as employeeService from "./service.js"
 export const registerEmployee = async (req, res) => {
     const employeeData = await employeeService.registerEmployee(req.body);
 
-    const relativePath = employeeData.QRcodePath.replace(/^.*[\\/]QRcodes[\\/]/, "");
-    const qrCodeUrl = `/qrcodes/${relativePath.replace(/\\/g, "/")}`;
+    const relativePath = employeeData.QRcodePath.split("QRcodes")[1].replace(/\\/g, "/");
+    const qrCodeUrl = `/qrcodes/${relativePath}`;
 
     res.status(201).location(`/api/v1/employees/${employeeData.id}`).json({
         success: true,
