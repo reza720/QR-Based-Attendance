@@ -1,6 +1,5 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { fileURLToPath } from "node:url";
 import qrcode from "qrcode";
 import crypto from "node:crypto";
 import { Op } from "sequelize";
@@ -11,11 +10,8 @@ import Employee from "./model.js";
 import throwError from "../../utils/throwError.js"
 import deleteFile from "../../utils/deleteFile.js";
 import Attendance from "../attendance/model.js";
-import { log } from "node:console";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const QRcodeDir = path.join(__dirname, "../../../storage/QRcodes");
+const QRcodeDir = path.join(process.cwd(), "storage/QRcodes");
 
 /**
  * Register a new employee and generate a unique QR code 
