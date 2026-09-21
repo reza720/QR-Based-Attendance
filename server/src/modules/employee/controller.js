@@ -1,4 +1,5 @@
-import * as employeeService from "./service.js"
+import * as employeeService from "./service.js";
+import linkBuilder from "./linkBuilder.js";
 
 // Register employee
 export const registerEmployee = async (req, res) => {
@@ -6,12 +7,14 @@ export const registerEmployee = async (req, res) => {
 
     const qrcodeRelativeUrl = employeeData.QRcodePath.split("QRcodes")[1].replace(/\\/g, "/");
 
+
     res.status(201).location(`/api/v1/employees/${employeeData.id}`).json({
         success: true,
         message: "Employee Registered",
         employee:{
             ...employeeData,
-            QRcodePath: qrcodeRelativeUrl
+            QRcodePath: qrcodeRelativeUrl,
+            _links: linkBuilder(employeeData.id, ['self'])
         }
     });
 };
@@ -56,7 +59,15 @@ export const getEmployee = async (req, res) => {
             ...employeeData,
             QRcodePath: qrcodeRelativeUrl,
             photoPath: photoRelativeUrl
-        }
+        },
+        _links: linkBuilder(employeeData.id, [
+            "self",
+            "uploadPhoto",
+            "update",
+            "delete",
+            "generateNewQRcode",
+            "getAttendances"
+        ])
     });
 };
 
