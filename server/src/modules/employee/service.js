@@ -10,6 +10,7 @@ import Employee from "./model.js";
 import throwError from "../../utils/throwError.js"
 import deleteFile from "../../utils/deleteFile.js";
 import Attendance from "../attendance/model.js";
+import { is } from "zod/v4/locales";
 
 const QRcodeDir = path.join(process.cwd(), "storage/QRcodes");
 
@@ -91,26 +92,37 @@ export const getEmployees = async (options = {}) => {
         ];
     }
 
-    const employees = await Employee.findAndCountAll({
-        attributes: [
-            "id",
-            "firstName",
-            "lastName",
-            "isActive",
-            "photoPath"
-        ],
+    const {count, rows} = await Employee.findAndCountAll({
         where,
         limit: limitNumber,
         offset,
         order: [["firstName", "ASC"]]
     });
 
+    const employees = rows.map((employee) => {
+        const {
+            id,
+            firstName,
+            lastName,
+            isActive,
+            photoPath
+        } = employee.toJSON();
+
+        return {
+            id,
+            firstName,
+            lastName,
+            isActive,
+            photoPath
+        };
+    });
+
     return {
         page: pageNumber,
         limit: limitNumber,
-        totalRecords: employees.count,
-        totalPages: Math.ceil(employees.count / limitNumber),
-        employees: employees.rows
+        totalRecords: count,
+        totalPages: Math.ceil(count / limitNumber),
+        employees
     };
 };
 
