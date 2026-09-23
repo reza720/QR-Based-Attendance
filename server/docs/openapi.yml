@@ -1,0 +1,21 @@
+openapi: 3.2.1
+
+info: 
+  title: QRCode-Base-Attendance
+  version: 1.0.0
+  description: API for managing employees attendance records
+
+server: 
+  - url: http://localhost:3000/api/v1
+    description: local development server
+
+tags: 
+  - name: auth
+    description: Authentication endpoints
+  - name: employee
+    description: employee manegement endpoints
+  - name: attendance 
+    description: attendance tracking endpoints
+
+paths:  
+  
