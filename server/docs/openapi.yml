@@ -7,15 +7,66 @@ info:
 
 server: 
   - url: http://localhost:3000/api/v1
-    description: local development server
 
 tags: 
-  - name: auth
-    description: Authentication endpoints
-  - name: employee
-    description: employee manegement endpoints
-  - name: attendance 
-    description: attendance tracking endpoints
+  - name: Auth
+  - name: Employee
+  - name: Attendance 
 
-paths:  
-  
+paths: 
+  /auth/login:
+    post:
+      tags: 
+        - Auth
+      description: login user with username and password
+
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema: 
+              type: object
+              required: 
+                - userName
+                - password
+              properties: 
+                userName: 
+                  - type: string
+                password: 
+                  - type: string
+                  - format: password
+            example: 
+              loginRequest: 
+                value: 
+                  userName: RezaPanahi
+                  password: r55s@$5000
+                
+      response: 
+        '200':
+          description: User logged in
+          conenet: 
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  id:   
+                    type: string
+                    format: uuid
+                  userName: 
+                    type: string
+              example:
+                success:
+                value: 
+                  id: 550e8400-e29b-41d4-a716-446655440000
+                  userName: RezaPanahi
+        '400':
+          description: username or passowrd is invalid
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  type: string
+      
+      security: []
+        
