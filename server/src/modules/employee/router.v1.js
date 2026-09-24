@@ -1,13 +1,10 @@
 import express from "express";
-import * as employeeController from "../controller.js";
-import upload from "../../../config/multer.js";
-import authRequired from "../../../middleware/authRequired.js";
-import validate from "../../../middleware/validate.js";
-import { registerationSchema, updateEmployeeSchema } from "../validation.js";
+import * as employeeController from "./controller.js";
+import upload from "../../config/multer.js";
+import validate from "../../middleware/validate.js";
+import { registerationSchema, updateEmployeeSchema } from "./validation.js";
 
 const router = express.Router();
-
-router.use(authRequired);
 
 router.post("/", 
     validate(registerationSchema),

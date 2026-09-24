@@ -9,11 +9,11 @@ server:
   - url: http://localhost:3000/api/v1
 
 tags: 
-  - name: Auth
   - name: Employee
   - name: Attendance 
 
 paths: 
+  # Auth
   /auth/login:
     post:
       tags: 
@@ -31,15 +31,9 @@ paths:
                 - password
               properties: 
                 userName: 
-                  - type: string
+                  type: string
                 password: 
-                  - type: string
-                  - format: password
-            example: 
-              loginRequest: 
-                value: 
-                  userName: RezaPanahi
-                  password: r55s@$5000
+                  type: string
                 
       response: 
         '200':
@@ -49,24 +43,144 @@ paths:
               schema: 
                 type: object
                 properties: 
-                  id:   
+                  success: 
+                    type: boolean
+                  messag: 
                     type: string
-                    format: uuid
-                  userName: 
-                    type: string
-              example:
-                success:
-                value: 
-                  id: 550e8400-e29b-41d4-a716-446655440000
-                  userName: RezaPanahi
+                  user: 
+                    type: object
+                    properties: 
+                      id: 
+                        type: string
+                        format: uuid
+                      userName: 
+                        type: string
         '400':
-          description: username or passowrd is invalid
+          description: Invalid username or passowrd
           content: 
             application/json:
               schema: 
                 type: object
                 properties: 
+                  suceess: 
+                    type: boolean
+                message: 
                   type: string
-      
+
       security: []
+  
+  /auth/logout:
+    'post':
+      tags: 
+        - Auth
+      description: Destroy user session and logout 
+
+      responses: 
+        '200':
+          description: User logged out
+          content:
+            application/json:
+              schema: 
+                type: object
+                propeties: 
+                  success: 
+                    type: boolean
+                  message: 
+                    type: string
+        '401':
+          $ref: '#/components/responses/unauthorized'
+                
+  /auth/update:
+    'patch':
+      tags:
+        - Auth
+      description: Update username and password
+      
+      requestBody:
+        required: true
+        content: 
+          application/json:
+            schema: 
+              type: object
+              required: 
+                - userId
+                - oldPassword
+              properties: 
+                userId:
+                  type: string
+                  format: uuid
+                oldPassword: 
+                  type: string
+                newPassword:
+                  type: string
+                newUserName:
+                  type: string
+      responses: 
+        '200':
+          description: User updated
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties: 
+                  success:
+                    type: boolean
+                  message: 
+                    type: string
+                  user: 
+                    type: object
+                    properties: 
+                      id: 
+                        type: string
+                      userName: 
+                        type: string
+        '404':
+          $ref: '#/components/responses/notFound' 
         
+        '401':
+          $ref: '#/components/responses/unauthorized'
+
+        '403':
+          description: Invalid password
+          content: 
+            application/json:
+              schema: 
+                type: object
+                properties:
+                  success:  
+                    type: boolean
+                  message: 
+                    type: string
+                      
+
+
+  # Employee
+
+
+  # Attendance
+
+components: 
+  responses: 
+    unauthorized: 
+      description: Authetication is required
+      content: 
+        application/json:
+          schema: 
+            type: object
+            properties: 
+              success: 
+                type: boolean
+              message: 
+                type: string
+    
+    notFound:
+    description: User not found
+    content: 
+      application/json:
+        schema: 
+          type: object
+          properties: 
+            success:
+              type: boolean
+            message: 
+              type: string

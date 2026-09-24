@@ -13,8 +13,6 @@ const envSchema = z.object({
     DB_USER: z.string().min(1),
     DB_PASSWORD: z.string(),
     DB_HOST: z.string().min(1),
-
-    SESSION_SECRET: z.string().min(64)
 });
 
 const parsedEnv = envSchema.safeParse(process.env);
@@ -36,10 +34,6 @@ const env = {
         dbUser: parsedEnv.data.DB_USER,
         dbPassword: parsedEnv.data.DB_PASSWORD,
         dbHost: parsedEnv.data.DB_HOST
-    },
-
-    session: {
-        sessionSecret: parsedEnv.data.SESSION_SECRET
     }
 };
 
